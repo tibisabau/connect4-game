@@ -7,6 +7,19 @@
 <body>
 <main>
     <h1>Connect 4 Game</h1>
+    <button id="b1">Play</button>
+    <input id="out" type="text" />
+
+    <script>
+        window.addEventListener("load", function () {
+    /*
+     * We define what happens when button #b is clicked.
+     */
+    document.getElementById("b1").addEventListener("click", function () {
+      document.getElementById("out").value = "Hello World!";
+    });
+  });
+    </script>
 </main>
 </body>
 </html>
