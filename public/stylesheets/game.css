@@ -1,0 +1,18 @@
+.grid {
+    border: 1px solid;
+    height: 720px;
+    width: 840px;
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+}
+
+body {
+    background-color: #00B7FF;
+}
+
+.grid div {
+    height: 120px;
+    width : 120px;
+    background-color: slateblue;
+}
