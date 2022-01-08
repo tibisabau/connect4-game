@@ -1,10 +1,15 @@
 .grid {
+    position: absolute;
     border: 1px solid;
-    height: 720px;
-    width: 840px;
+    height: 600px;
+    width: 650px;
     display: flex;
     flex-wrap: wrap;
-    margin: auto;
+    top: 4rem;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: slateblue;
+    padding: 2rem;
 }
 
 body {
@@ -12,7 +17,9 @@ body {
 }
 
 .grid div {
-    height: 120px;
-    width : 120px;
-    background-color: slateblue;
+    height: 90px;
+    width : 90px;
+    background-color: white;
+    border-radius: 50%;
+    border: 1px solid black;
 }
