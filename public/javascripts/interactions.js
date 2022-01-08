@@ -25,14 +25,15 @@ GameState.prototype.initializeStack = function () {
 }
 
 GameState.prototype.updateGame = function(clickedSquare) {
-
-        if(this.gameGrid[this.stack[parseInt(clickedSquare[5], 10)]][parseInt(clickedSquare[5], 10)] == 0) {
+    if(this.stack[parseInt(clickedSquare[4], 10)] > 0) {
             if(this.getPlayerNumber() == 1) {
-                this.gameGrid[parseInt(clickedSquare[5], 10)][parseInt(clickedSquare[5], 10)] = 1;
+                this.gameGrid[this.stack[parseInt(clickedSquare[4], 10)]][parseInt(clickedSquare[5], 10)] = 1;
             }
             else
-                this.gameGrid[parseInt(clickedSquare[5], 10)][parseInt(clickedSquare[5], 10)] = 2;
+                this.gameGrid[this.stack[parseInt(clickedSquare[4], 10)]][parseInt(clickedSquare[5], 10)] = 2;
+
     }
+
 }
 
 function Grid(gs) {
