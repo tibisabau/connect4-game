@@ -56,4 +56,5 @@ wss.on("connection", function connection(ws) {
         currentGame = new Game(gameStatus.gamesInitialized++);
     }
 
-}
+})
+server.listen(port);
