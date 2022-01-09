@@ -1,6 +1,6 @@
 //ts-check
 function GameState(sb) {
-    this.playerNumber = null;
+    this.playerType = null;
     this.MAX_CONNECTED= Setup.MAX_CONNECTED;
     //this.socket = socket;
     this.gameGrid = null;
@@ -8,12 +8,12 @@ function GameState(sb) {
     this.stack = null;
 }
 
-GameState.prototype.getPlayerNumber = function () {
-    return this.playerNumber;
+GameState.prototype.getPlayerType = function () {
+    return this.playerType;
 };
 
 GameState.prototype.setPlayerType = function (p) {
-    this.playerNumber = p;
+    this.playerType = p;
 };
 
 GameState.prototype.initializeGrid = function () {
@@ -26,12 +26,13 @@ GameState.prototype.initializeStack = function () {
 
 GameState.prototype.updateGame = function(clickedSquare) {
     if(this.stack[parseInt(clickedSquare[4])] > 0) {
-            if(this.getPlayerNumber() == 1) {
-                this.gameGrid[this.stack[parseInt(clickedSquare[4])]][parseInt(clickedSquare[5])] = 1;
-            }
-            else
-                this.gameGrid[this.stack[parseInt(clickedSquare[4])]][parseInt(clickedSquare[5])] = 2;
+        if(this.getPlayerType() == "A")
+            this.gameGrid[this.stack[parseInt(clickedSquare[4])]][parseInt(clickedSquare[5])] = 1;
 
+        else
+            this.gameGrid[this.stack[parseInt(clickedSquare[4])]][parseInt(clickedSquare[5])] = 2;
+
+        this.stack[parseInt(clickedSquare[4])] --;
     }
 
 }
@@ -56,7 +57,7 @@ function StatusBar() {
 }
 
 (function setup() {
-    //const socket = new WebSocket(Setup.WEB_SOCKET_URL);
+    const socket = new WebSocket(Setup.WEB_SOCKET_URL);
     const sb = new StatusBar();
     const gs = new GameState(sb);
     const grid = new Grid(gs);

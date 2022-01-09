@@ -1,41 +1,59 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require("express");
+const http = require("http");
+const websocket = require("ws");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require("./routes/index");
+const messages = require("./public/javascripts/messages");
 
-var app = express();
+const gameStatus = require("./statTracker");
+const Game = require("./game");
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+if(process.argv.length < 3) {
+    console.log("Error: expected a port as argument (eg. 'node app.js 3000').");
+    process.exit(1);
+}
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+const port = process.argv[2];
+const app = express();
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.set("view engine", "ejs");
+app.use(express.static(__dirname + "/public"));
+http.createServer(app).listen(port);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+app.get("/play", indexRouter);
+app.get("/", indexRouter);
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+const wss = new websocket.Server({ server });
+const websockets = {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+setInterval(function() {
+    for (let i in websockets) {
+        if (Object.prototype.hasOwnProperty.call(websockets,i)) {
+            let gameObj = websockets[i];
+            //if the gameObj has a final status, the game is complete/aborted
+            if (gameObj.finalStatus != null) {
+                delete websockets[i];
+            }
+        }
+    }
+}, 50000);
 
-module.exports = app;
+let currentGame = new Game(gameStatus.gamesInitialized++);
+let connectionID = 0;
+
+wss.on("connection", function connection(ws) {
+    const con = ws;
+    con["id"] = connectionID++;
+    const playerType = currentGame.addPlayer(con);
+    websockets[con["id"]] = currentGame;
+
+    console.log(
+        `Player ${con["id"]} placed in game ${currentGame.id} as ${playerType}`
+    );
+
+    con.send(playerType == "A" ? messages.S_PLAYER_A : messages.S_PLAYER_B);
+    if (currentGame.hasTwoConnectedPlayers()) {
+        currentGame = new Game(gameStatus.gamesInitialized++);
+    }
+
+}
