@@ -24,8 +24,12 @@ body {
     border: 1px solid black;
 }
 
-.taken:hover {
-    background-color: black;
+.cell:hover ~ .taken{
+    background-color: red;
+}
+
+.taken:hover{
+    background-color: red;
 }
 
 @media (max-width: 799px), (max-height: 799px) {

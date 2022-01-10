@@ -54,14 +54,20 @@ function Grid(gs) {
                 console.log(parseInt(clickedSquare[4]), parseInt(clickedSquare[5]))
                 gs.updateGame(clickedSquare);
             })
-            // el.addEventListener('mouseover', function (e){
-            //     Array.from(squares).forEach(function (el){
-            //         const hover = el.target.id;
-            //         const column = parseInt(hover[5]);
-            //         if(parseInt(hover[4]) == gs.stack[column])
-            //             document.getElementById("cell" + hover[4] + hover[5]).style.backgroundColor = "red"
-            //     })
-            // })
+            el.addEventListener('mouseover', function (e){
+                const hoveredSquare = e.target.id;
+                const column = hoveredSquare[5];
+                const nextAvailable = gs.stack[parseInt(column)];
+                console.log("cell" + nextAvailable.toString() +column);
+                document.getElementById("cell" + nextAvailable.toString() + column).className = "taken";
+            })
+            el.addEventListener('mouseleave', function (e){
+                const hoveredSquare = e.target.id;
+                const column = hoveredSquare[5];
+                const nextAvailable = gs.stack[parseInt(column)];
+                console.log("cell" + nextAvailable.toString() +column);
+                document.getElementById("cell" + nextAvailable.toString() + column).className = "cell";
+            })
         })
     }
 }
