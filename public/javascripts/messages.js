@@ -29,7 +29,6 @@
     }
     exports.PP_PLAYER_A = JSON.stringify(exports.Y_PLAYER_A);
 
-    exports.PLAYER_TURN = "PLAYER-TURN";
     exports.Y_PLAYER_B = {
         type: exports.PLAYER_TURN,
         data: "YOUR OPPONENT'S TURN!"

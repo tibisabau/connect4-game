@@ -1,4 +1,3 @@
-//ts-check
 function GameState(socket, sb) {
     this.playerType = null;
     this.MAX_CONNECTED= Setup.MAX_CONNECTED;

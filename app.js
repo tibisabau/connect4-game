@@ -18,11 +18,9 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-http.createServer(app).listen(port);
-
 app.get("/play", indexRouter);
 app.get("/", indexRouter);
-
+const server = http.createServer(app);
 const wss = new websocket.Server({ server });
 const websockets = {};
 
@@ -52,9 +50,43 @@ wss.on("connection", function connection(ws) {
     );
 
     con.send(playerType == "A" ? messages.S_PLAYER_A : messages.S_PLAYER_B);
+    if (playerType == "A") {
+        let msg = messages.PP_PLAYER_A;
+        con.send(msg);
+    } else if (playerType == "B") {
+        let msg = messages.PP_PLAYER_B;
+        con.send(msg);
+    }
+
     if (currentGame.hasTwoConnectedPlayers()) {
         currentGame = new Game(gameStatus.gamesInitialized++);
     }
 
+    con.on("message", function incoming(message) {
+        const oMsg = JSON.parse(message.toString());
+
+        const gameObj = websockets[con["id"]];
+        const isPlayerA = gameObj.playerA == con ? true : false;
+        if (isPlayerA) {
+            if(oMsg.type == messages.PLAYER_TURN)
+                if(gameObj.hasTwoConnectedPlayers()) {
+                    gameObj.playerB.send(message);
+                    let msg = messages.PP_PLAYER_B;
+                    gameObj.playerA.send(msg);
+                    gameObj.setPlayerTurn(2);
+                }
+
+        }
+
+        else {
+            if(oMsg.type == messages.PLAYER_TURN)
+                if(gameObj.hasTwoConnectedPlayers()) {
+                    gameObj.playerA.send(message);
+                    let msg = messages.PP_PLAYER_A;
+                    gameObj.playerB.send(msg);
+                    gameObj.setPlayerTurn(1);
+                }
+        }
+    })
 })
 server.listen(port);
