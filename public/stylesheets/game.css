@@ -24,11 +24,7 @@ body {
     border: 1px solid black;
 }
 
-.cell:hover ~ .taken{
-    background-color: red;
-}
-
-.taken:hover{
+.cell:hover ~ .taken, .taken, .taken:hover{
     background-color: red;
 }
 
