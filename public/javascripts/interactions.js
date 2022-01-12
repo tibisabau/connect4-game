@@ -28,10 +28,10 @@ GameState.prototype.initializeGrid = function () {
 GameState.prototype.initializeStack = function () {
     this.stack = Array(7).fill(5);
 }
-GameState.prototype.FourInARow = function(player) {
-    return horizontalCheck(player) || verticalCheck(player)|| diagonalCheck(player) || secondDiagonalCheck(player);
+GameState.prototype.fourInARow = function(player) {
+    return horizontalCheck(player, this.gameGrid) || verticalCheck(player, this.gameGrid)|| diagonalCheck(player, this.gameGrid) || secondDiagonalCheck(player, this.gameGrid);
 }
-function horizontalCheck(player){
+function horizontalCheck(player, grid){
     for (let row = 0; row < grid.length; row++){
         for (let col =0; col < 4; col++){
             if(grid[row][col] == player && grid[row][col+1] == player && grid[row][col+2] == player && grid[row][col+3] == player)
@@ -41,7 +41,7 @@ function horizontalCheck(player){
     return false;
 }
 
-function verticalCheck(){
+function verticalCheck(player, grid){
     for (let col = 0; col < 7; col++){
         for (let row = 0; row < 3; row++){
             if(grid[row][col] == player && grid[row+1][col] == player && grid[row+2][col] == player && grid[row+3][col] == player)
@@ -51,7 +51,7 @@ function verticalCheck(){
     return false;
 }
 
-function diagonalCheck(){
+function diagonalCheck(player, grid){
     for(let col = 0; col < 4; col++){
         for (let row = 0; row < 3; row++){
             if(grid[row][col] == player && grid[row+1][col+1] == player && grid[row+2][col+2] == player && grid[row+3][col+3] == player)
@@ -62,7 +62,7 @@ function diagonalCheck(){
         return false;
 }
 
-function secondDiagonalCheck(){
+function secondDiagonalCheck(player, grid){
     for(let col = 0; col < 4; col++){
         for (let row = 5; row > 2; row--){
             if(grid[row][col] == player && grid[row-1][col+1] == player && grid[row-2][col+2] == player && grid[row-3][col+3] == player)
@@ -80,13 +80,13 @@ GameState.prototype.checkIfOver = function() {
     }
     //check if player A won
     if(this.getPlayerType() == "A") {
-        if(FourInARow(1)) {
+        if(this.fourInARow(1)) {
             return 'A';
         }
     }
     //check if player B won
     else {
-        if(FourInARow(2)) {
+        if(this.fourInARow(2)) {
             return 'B';
         }
     }
@@ -117,7 +117,7 @@ GameState.prototype.updateGame = function(clickedSquare) {
         });
 
         let alertString;
-        if(winner == 'TIE') {
+        if(winner == "TIE") {
             alertString = Status["gameTied"];
         } else {
             if (winner == this.playerType) {
@@ -128,7 +128,7 @@ GameState.prototype.updateGame = function(clickedSquare) {
             alertString += Status["playAgain"];
             this.statusBar.setStatus(alertString);
 
-            let finalMsg = Messages.O_GAME_WON_BY;  
+            let finalMsg = Messages.O_GAME_WON_BY;
             finalMsg.data = winner;
             this.socket.send(JSON.stringify(finalMsg));
         }

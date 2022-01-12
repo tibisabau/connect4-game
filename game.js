@@ -14,7 +14,8 @@ game.prototype.transitionStates = {
     "TURN": 3,
     "A": 4, //A won
     "B": 5, //B won
-    "ABORTED": 6
+    "ABORTED": 6,
+    "TIED" : 7
 };
 
 game.prototype.transitionMatrix = [
@@ -24,6 +25,7 @@ game.prototype.transitionMatrix = [
     [0, 0, 0, 1, 1, 1, 1],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0]
     [0, 0, 0, 0, 0, 0, 0]
 ];
 
