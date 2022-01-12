@@ -1,3 +1,5 @@
+//ts-check
+
 const express = require("express");
 const http = require("http");
 const websocket = require("ws");
@@ -87,6 +89,43 @@ wss.on("connection", function connection(ws) {
                     gameObj.setPlayerTurn(1);
                 }
         }
-    })
+    });
+
+    con.on("close", function(code) {
+        /*
+         * code 1001 means almost always closing initiated by the client;
+         * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
+         */
+        console.log(`${con["id"]} disconnected ...`);
+    
+        if (code == 1001) {
+          /*
+           * if possible, abort the game; if not, the game is already completed
+           */
+          const gameObj = websockets[con["id"]];
+    
+          if (gameObj.isValidTransition(gameObj.gameState, "ABORTED")) {
+            gameObj.setStatus("ABORTED");
+    
+            /*
+             * determine whose connection remains open;
+             * close it
+             */
+            try {
+              gameObj.playerA.close();
+              gameObj.playerA = null;
+            } catch (e) {
+              console.log("Player A closing: " + e);
+            }
+    
+            try {
+              gameObj.playerB.close();
+              gameObj.playerB = null;
+            } catch (e) {
+              console.log("Player B closing: " + e);
+            }
+          }
+        }
+      });
 })
 server.listen(port);
