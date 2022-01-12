@@ -28,23 +28,65 @@ GameState.prototype.initializeGrid = function () {
 GameState.prototype.initializeStack = function () {
     this.stack = Array(7).fill(5);
 }
-GameState.prototype.FourInARow = function(lastCell, player) {
-
+GameState.prototype.FourInARow = function(player) {
+    return horizontalCheck(player) || verticalCheck(player)|| diagonalCheck(player) || secondDiagonalCheck(player);
 }
-GameState.prototype.checkIfOver = function(lastCell) {
+function horizontalCheck(player){
+    for (let row = 0; row < grid.length; row++){
+        for (let col =0; col < 4; col++){
+            if(grid[row][col] == player && grid[row][col+1] == player && grid[row][col+2] == player && grid[row][col+3] == player)
+               return true;
+        }
+    }
+    return false;
+}
+
+function verticalCheck(){
+    for (let col = 0; col < 7; col++){
+        for (let row = 0; row < 3; row++){
+            if(grid[row][col] == player && grid[row+1][col] == player && grid[row+2][col] == player && grid[row+3][col] == player)
+               return true;
+         }
+    }   
+    return false;
+}
+
+function diagonalCheck(){
+    for(let col = 0; col < 4; col++){
+        for (let row = 0; row < 3; row++){
+            if(grid[row][col] == player && grid[row+1][col+1] == player && grid[row+2][col+2] == player && grid[row+3][col+3] == player)
+                    return true;
+                
+            }
+        }
+        return false;
+}
+
+function secondDiagonalCheck(){
+    for(let col = 0; col < 4; col++){
+        for (let row = 5; row > 2; row--){
+            if(grid[row][col] == player && grid[row-1][col+1] == player && grid[row-2][col+2] == player && grid[row-3][col+3] == player)
+                    return true;
+            
+        }
+    }
+    return false;
+}
+
+GameState.prototype.checkIfOver = function() {
     //the grid is full, so the game is a tie
     if(this.numberOfDiscs == 42) {
         return "TIE";
     }
     //check if player A won
     if(this.getPlayerType() == "A") {
-        if(FourInARow(lastCell,1)) {
+        if(FourInARow(1)) {
             return 'A';
         }
     }
     //check if player B won
     else {
-        if(FourInARow(lastCell,2)) {
+        if(FourInARow(2)) {
             return 'B';
         }
     }
@@ -64,6 +106,7 @@ GameState.prototype.updateGame = function(clickedSquare) {
              document.getElementById("cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5]) .className = "yellow";
             }
         this.stack[parseInt(clickedSquare[5])] --;
+        this.numberOfDiscs++;
     }
     const winner = this.checkIfOver(clickedSquare);
     if(winner != null) {
