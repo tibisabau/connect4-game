@@ -57,7 +57,11 @@ function Grid(gs) {
                 const column = hoveredSquare[5];
                 const nextAvailable = gs.stack[parseInt(column)];
                 console.table(gs.stack);
-                document.getElementById("cell" + nextAvailable.toString() + column).className = "taken";
+                if(gs.getPlayerType() == "A")
+                    var colorClass = "takenRed";
+                else
+                    colorClass = "takenYellow";
+                document.getElementById("cell" + nextAvailable.toString() + column).className = colorClass;
             })
             el.addEventListener('mouseleave', function (e){
                 const hoveredSquare = e.target.id;

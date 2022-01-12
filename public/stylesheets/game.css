@@ -27,7 +27,11 @@ body {
     background-color: white;
 }
 
-.grid div:hover ~ .taken, .taken{
+.grid div:hover ~ .takenYellow, .takenYellow{
+    background-color: yellow;
+}
+
+.grid div:hover ~ .takenRed, .takenRed{
     background-color: red;
 }
 
