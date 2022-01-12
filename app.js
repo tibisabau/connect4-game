@@ -89,6 +89,12 @@ wss.on("connection", function connection(ws) {
                     gameObj.setPlayerTurn(1);
                 }
         }
+
+        if (oMsg.type == messages.T_GAME_WON_BY) {
+            gameObj.setStatus(oMsg.data);
+            //game was won by somebody, update statistics
+            gameStatus.gamesCompleted++;
+        }
     });
 
     con.on("close", function(code) {
@@ -106,7 +112,7 @@ wss.on("connection", function connection(ws) {
     
           if (gameObj.isValidTransition(gameObj.gameState, "ABORTED")) {
             gameObj.setStatus("ABORTED");
-    
+              gameStatus.gamesAborted++;
             /*
              * determine whose connection remains open;
              * close it
