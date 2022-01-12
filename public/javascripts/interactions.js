@@ -2,7 +2,12 @@ function GameState(socket, sb) {
     this.playerType = null;
     this.MAX_CONNECTED= Setup.MAX_CONNECTED;
     this.socket = socket;
-    this.gameGrid = null;
+    this.gameGrid = [[0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0]];;
     this.statusBar = sb;
     this.stack = null;
     this.numberOfDiscs = 0;
@@ -14,15 +19,6 @@ GameState.prototype.getPlayerType = function () {
 
 GameState.prototype.setPlayerType = function (p) {
     this.playerType = p;
-};
-
-GameState.prototype.initializeGrid = function () {
-    this.gameGrid =  [[0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0]];
 };
 
 GameState.prototype.initializeStack = function () {
@@ -179,6 +175,36 @@ function StatusBar() {
     const grid = new Grid(gs);
     grid.initialize();
     gs.initializeStack();
-    gs.setPlayerType("A");
-    gs.initializeGrid();
+    socket.onmessage = function (event) {
+        let incomingMsg = JSON.parse(event.data);
+
+        //set player type
+        if (incomingMsg.type == Messages.T_PLAYER_TYPE) {
+            gs.setPlayerType(incomingMsg.data); //should be "A" or "B"
+
+            //if player type is A, (1) pick a word, and (2) sent it to the server
+            if (incomingMsg.type == Messages.PLAYER_TURN && gs.getPlayerType() == "A") {
+                sb.setStatus(Status["player1Intro"]);
+                sb.setStatus(Status["picked"] + incomingMsg.data);
+                gs.updateGame(incomingMsg.data);
+            }
+
+            if (incomingMsg.type == Messages.PLAYER_TURN && gs.getPlayerType() == "B") {
+                sb.setStatus(Status["player2Intro"]);
+                sb.setStatus(Status["picked"] + incomingMsg.data);
+                gs.updateGame(incomingMsg.data);
+            }
+        }
+    }
+        socket.onopen = function () {
+            socket.send("{}");
+        };
+
+        //server sends a close event only if the game was aborted from some side
+        socket.onclose = function () {
+            if (gs.checkIfOver() == null) {
+                sb.setStatus(Status["aborted"]);
+            }
+        };
+    socket.onerror = function () {};
 })();
