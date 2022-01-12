@@ -19,15 +19,24 @@ body {
 .grid div {
     height: 90px;
     width : 90px;
-    background-color: white;
     border-radius: 50%;
     border: 1px solid black;
 }
 
-.cell:hover ~ .taken, .taken, .taken:hover{
+.cell {
+    background-color: white;
+}
+
+.grid div:hover ~ .taken, .taken{
     background-color: red;
 }
 
+.red {
+    background-color: red;
+}
+.yellow {
+    background-color: yellow;
+}
 @media (max-width: 799px), (max-height: 799px) {
     body::before {
         position: absolute;

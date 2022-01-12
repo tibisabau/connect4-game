@@ -32,13 +32,13 @@ GameState.prototype.updateGame = function(clickedSquare) {
     if(this.stack[parseInt(clickedSquare[5])] >= 0) {
         if(this.getPlayerType() == "A") {
             this.gameGrid[this.stack[parseInt(clickedSquare[5])]][parseInt(clickedSquare[5])] = 1;
-            document.getElementById("cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5]) .style.backgroundColor = "red";
+             document.getElementById("cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5]) .className = "red";
         }
 
         else {
             this.gameGrid[this.stack[parseInt(clickedSquare[5])]][parseInt(clickedSquare[5])] = 2;
-            document.getElementById("cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5]) .style.backgroundColor = "yellow";        }
-
+             document.getElementById("cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5]) .className = "yellow";
+            }
         this.stack[parseInt(clickedSquare[5])] --;
     }
     console.table(this.gameGrid);
@@ -46,7 +46,7 @@ GameState.prototype.updateGame = function(clickedSquare) {
 
 function Grid(gs) {
     this.initialize = function () {
-        const squares = document.querySelectorAll(".cell");
+        const squares = document.querySelectorAll(".grid div");
         Array.from(squares).forEach(function(el) {
             el.addEventListener("click", function singleClick(e) {
                 const clickedSquare = e.target["id"];
@@ -57,13 +57,13 @@ function Grid(gs) {
                 const column = hoveredSquare[5];
                 const nextAvailable = gs.stack[parseInt(column)];
                 console.table(gs.stack);
-                document.getElementById("cell" + nextAvailable.toString() + column).style.backgroundColor = "red";
+                document.getElementById("cell" + nextAvailable.toString() + column).className = "taken";
             })
             el.addEventListener('mouseleave', function (e){
                 const hoveredSquare = e.target.id;
                 const column = hoveredSquare[5];
                 const nextAvailable = gs.stack[parseInt(column)];
-                document.getElementById("cell" + nextAvailable.toString() + column).style.backgroundColor = "white";
+                document.getElementById("cell" + nextAvailable.toString() + column).className = "cell";
             })
         })
     }
