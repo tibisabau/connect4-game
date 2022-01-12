@@ -5,6 +5,7 @@ function GameState(socket, sb) {
     this.gameGrid = null;
     this.statusBar = sb;
     this.stack = null;
+    this.numberOfDiscs = 0;
 }
 
 GameState.prototype.getPlayerType = function () {
@@ -27,6 +28,29 @@ GameState.prototype.initializeGrid = function () {
 GameState.prototype.initializeStack = function () {
     this.stack = Array(7).fill(5);
 }
+GameState.prototype.FourInARow = function(lastCell, player) {
+
+}
+GameState.prototype.checkIfOver = function(lastCell) {
+    //the grid is full, so the game is a tie
+    if(this.numberOfDiscs == 42) {
+        return "TIE";
+    }
+    //check if player A won
+    if(this.getPlayerType() == "A") {
+        if(FourInARow(lastCell,1)) {
+            return 'A';
+        }
+    }
+    //check if player B won
+    else {
+        if(FourInARow(lastCell,2)) {
+            return 'B';
+        }
+    }
+    //game is not over
+    return null;
+};
 
 GameState.prototype.updateGame = function(clickedSquare) {
     if(this.stack[parseInt(clickedSquare[5])] >= 0) {
@@ -40,6 +64,32 @@ GameState.prototype.updateGame = function(clickedSquare) {
              document.getElementById("cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5]) .className = "yellow";
             }
         this.stack[parseInt(clickedSquare[5])] --;
+    }
+    const winner = this.checkIfOver(clickedSquare);
+    if(winner != null) {
+        const elements = document.querySelectorAll(".cell");
+        Array.from(elements).forEach(function (el) {
+          // @ts-ignore
+          el.style.pointerEvents = "none";
+        });
+
+        let alertString;
+        if(winner == 'TIE') {
+            alertString = Status["gameTied"];
+        } else {
+            if (winner == this.playerType) {
+                alertString = Status["gameWon"];
+            } else {
+                alertString = Status["gameLost"];
+            }
+            alertString += Status["playAgain"];
+            this.statusBar.setStatus(alertString);
+
+            let finalMsg = Messages.O_GAME_WON_BY;  
+            finalMsg.data = winner;
+            this.socket.send(JSON.stringify(finalMsg));
+        }
+        this.socket.close();
     }
     console.table(this.gameGrid);
 }

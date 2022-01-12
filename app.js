@@ -95,6 +95,11 @@ wss.on("connection", function connection(ws) {
             //game was won by somebody, update statistics
             gameStatus.gamesCompleted++;
         }
+        if (oMsg.type == messages.O_GAME_TIED) {
+            gameObj.setStatus("TIED");
+            //game was tied by somebody, update statistics
+            gameStatus.gamesCompleted++;
+        }
     });
 
     con.on("close", function(code) {

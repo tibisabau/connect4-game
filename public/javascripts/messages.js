@@ -4,6 +4,12 @@
         type: exports.T_GAME_WON_BY,
         data: null,
     };
+    
+    exports.O_GAME_TIED = {
+        type: "GAME-TIED",
+    };
+    exports.S_GAME_TIED = JSON.stringify(exports.O_GAME_TIED);
+
     exports.O_GAME_ABORTED = {
         type: "GAME-ABORTED",
     };
