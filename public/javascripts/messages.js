@@ -28,19 +28,24 @@
     };
     exports.S_PLAYER_B = JSON.stringify(exports.O_PLAYER_B);
 
-    exports.PLAYER_TURN = "PLAYER-TURN";
-    exports.Y_PLAYER_A = {
-        type: exports.PLAYER_TURN,
-        data: "YOUR TURN!"
+    exports.T_PLAYER_TURN = "PLAYER-TURN";
+    exports.O_PLAYER_TURN_A = {
+        type: exports.T_PLAYER_TURN,
+        data:"A",
     }
-    exports.PP_PLAYER_A = JSON.stringify(exports.Y_PLAYER_A);
+    exports.S_PLAYER_TURN_A = JSON.stringify(exports.O_PLAYER_TURN_A);
 
-    exports.Y_PLAYER_B = {
-        type: exports.PLAYER_TURN,
-        data: "YOUR OPPONENT'S TURN!"
+    exports.O_PLAYER_TURN_B = {
+        type: exports.T_PLAYER_TURN,
+        data:"B",
     }
-    exports.PP_PLAYER_B = JSON.stringify(exports.Y_PLAYER_B);
+    exports.S_PLAYER_TURN_B = JSON.stringify(exports.O_PLAYER_TURN_B);
 
+    exports.T_MAKE_A_GUESS = "MAKE-A-GUESS";
+    exports.O_MAKE_A_GUESS = {
+        type: exports.T_MAKE_A_GUESS,
+        data: null,
+    };
 
     exports.T_GAME_OVER = "GAME-OVER";
     exports.O_GAME_OVER = {

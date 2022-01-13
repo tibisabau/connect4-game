@@ -1,13 +1,13 @@
 function GameState(socket, sb) {
     this.playerType = null;
-    this.MAX_CONNECTED= Setup.MAX_CONNECTED;
+    this.playerTurn = null;
     this.socket = socket;
     this.gameGrid = [[0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0]];;
+        [0, 0, 0, 0, 0, 0, 0]];
     this.statusBar = sb;
     this.stack = null;
     this.numberOfDiscs = 0;
@@ -15,6 +15,14 @@ function GameState(socket, sb) {
 
 GameState.prototype.getPlayerType = function () {
     return this.playerType;
+};
+
+GameState.prototype.getPlayerTurn = function () {
+    return this.playerTurn;
+};
+
+GameState.prototype.setPlayerTurn = function (p) {
+    this.playerTurn = p;
 };
 
 GameState.prototype.setPlayerType = function (p) {
@@ -101,21 +109,28 @@ GameState.prototype.updateGame = function(clickedSquare) {
             this.gameGrid[this.stack[parseInt(clickedSquare[5])]][parseInt(clickedSquare[5])] = 2;
              document.getElementById("cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5]) .className = "yellow";
             }
+        const outgoingMsg = Messages.O_MAKE_A_GUESS;
+        outgoingMsg.data = "cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5];
+        console.log(outgoingMsg.data);
         this.stack[parseInt(clickedSquare[5])] --;
         this.numberOfDiscs++;
+        this.socket.send(JSON.stringify(outgoingMsg));
     }
-    const winner = this.checkIfOver(clickedSquare);
+
+
+
+    const winner = this.checkIfOver();
     if(winner != null) {
         const elements = document.querySelectorAll(".cell");
         Array.from(elements).forEach(function (el) {
-          // @ts-ignore
           el.style.pointerEvents = "none";
         });
 
         let alertString;
         if(winner == "TIE") {
             alertString = Status["gameTied"];
-        } else {
+        }
+        else {
             if (winner == this.playerType) {
                 alertString = Status["gameWon"];
             } else {
@@ -141,23 +156,23 @@ function Grid(gs) {
                 const clickedSquare = e.target["id"];
                 gs.updateGame(clickedSquare);
             })
-            el.addEventListener('mouseover', function (e){
-                const hoveredSquare = e.target.id;
-                const column = hoveredSquare[5];
-                const nextAvailable = gs.stack[parseInt(column)];
-                console.table(gs.stack);
-                if(gs.getPlayerType() == "A")
-                    var colorClass = "takenRed";
-                else
-                    colorClass = "takenYellow";
-                document.getElementById("cell" + nextAvailable.toString() + column).className = colorClass;
-            })
-            el.addEventListener('mouseleave', function (e){
-                const hoveredSquare = e.target.id;
-                const column = hoveredSquare[5];
-                const nextAvailable = gs.stack[parseInt(column)];
-                document.getElementById("cell" + nextAvailable.toString() + column).className = "cell";
-            })
+            // el.addEventListener('mouseover', function (e){
+            //     const hoveredSquare = e.target.id;
+            //     const column = hoveredSquare[5];
+            //     const nextAvailable = gs.stack[parseInt(column)];
+            //     //console.table(gs.stack);
+            //     if(gs.getPlayerType() == "A")
+            //         var colorClass = "takenRed";
+            //     else
+            //         colorClass = "takenYellow";
+            //     document.getElementById("cell" + nextAvailable.toString() + column).className = colorClass;
+            // })
+            // el.addEventListener('mouseleave', function (e){
+            //     const hoveredSquare = e.target.id;
+            //     const column = hoveredSquare[5];
+            //     const nextAvailable = gs.stack[parseInt(column)];
+            //     document.getElementById("cell" + nextAvailable.toString() + column).className = "cell";
+            // })
         })
     }
 }
@@ -173,28 +188,41 @@ function StatusBar() {
     const sb = new StatusBar();
     const gs = new GameState(socket, sb);
     const grid = new Grid(gs);
-    grid.initialize();
-    gs.initializeStack();
+
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);
-
         //set player type
-        if (incomingMsg.type == Messages.T_PLAYER_TYPE) {
-            gs.setPlayerType(incomingMsg.data); //should be "A" or "B"
-
-            //if player type is A, (1) pick a word, and (2) sent it to the server
-            if (incomingMsg.type == Messages.PLAYER_TURN && gs.getPlayerType() == "A") {
-                sb.setStatus(Status["player1Intro"]);
-                sb.setStatus(Status["picked"] + incomingMsg.data);
-                gs.updateGame(incomingMsg.data);
-            }
-
-            if (incomingMsg.type == Messages.PLAYER_TURN && gs.getPlayerType() == "B") {
-                sb.setStatus(Status["player2Intro"]);
-                sb.setStatus(Status["picked"] + incomingMsg.data);
-                gs.updateGame(incomingMsg.data);
-            }
+        if (incomingMsg.type === Messages.T_PLAYER_TYPE) {
+            gs.initializeStack();
+            grid.initialize();
+            gs.setPlayerType(incomingMsg.data);
+            // if (gs.getPlayerTurn() == null)
+            //     gs.setPlayerTurn("A");
         }
+            // if (incomingMsg.type == Messages.T_PLAYER_TURN) {
+            //     console.log(gs.getPlayerTurn());
+            //     if(gs.getPlayerTurn() == "A") {
+            //         sb.setStatus(Status["player1Intro"]);
+            //     }
+            //     else {
+            //         sb.setStatus(Status["player2Intro"]);
+            //     }
+            // }
+        if (incomingMsg.type == Messages.T_MAKE_A_GUESS) {
+            if(gs.getPlayerType() == "A") {
+                sb.setStatus(Status["picked"] + incomingMsg.data);
+                gs.updateGame(incomingMsg.data);
+                gs.setPlayerTurn("B");
+            }
+
+            else {
+                sb.setStatus(Status["picked"] + incomingMsg.data);
+                gs.updateGame(incomingMsg.data);
+                gs.setPlayerTurn("A");
+            }
+
+        }
+
     }
         socket.onopen = function () {
             socket.send("{}");

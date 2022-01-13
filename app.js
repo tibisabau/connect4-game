@@ -50,44 +50,44 @@ wss.on("connection", function connection(ws) {
     console.log(
         `Player ${con["id"]} placed in game ${currentGame.id} as ${playerType}`
     );
-
     con.send(playerType == "A" ? messages.S_PLAYER_A : messages.S_PLAYER_B);
-    if (playerType == "A") {
-        let msg = messages.PP_PLAYER_A;
-        con.send(msg);
-    } else if (playerType == "B") {
-        let msg = messages.PP_PLAYER_B;
-        con.send(msg);
-    }
+    //con.send(messages.S_PLAYER_TURN_A);
 
     if (currentGame.hasTwoConnectedPlayers()) {
         currentGame = new Game(gameStatus.gamesInitialized++);
     }
-
     con.on("message", function incoming(message) {
         const oMsg = JSON.parse(message.toString());
 
         const gameObj = websockets[con["id"]];
         const isPlayerA = gameObj.playerA == con ? true : false;
         if (isPlayerA) {
-            if(oMsg.type == messages.PLAYER_TURN)
-                if(gameObj.hasTwoConnectedPlayers()) {
-                    gameObj.playerB.send(message);
-                    let msg = messages.PP_PLAYER_B;
-                    gameObj.playerA.send(msg);
-                    gameObj.setPlayerTurn(2);
-                }
-
+            // if(oMsg.type == messages.T_PLAYER_TURN) {
+            //     gameObj.setPlayerTurn(oMsg.data);
+            //     if(gameObj.hasTwoConnectedPlayers()) {
+            //         gameObj.setStatus("TURN");
+            //         gameObj.playerB.send(message);
+            //     }
+            //}
+            if (oMsg.type == messages.T_MAKE_A_GUESS) {
+                gameObj.playerB.send(message);
+                gameObj.setStatus("TURN");
+            }
         }
 
         else {
-            if(oMsg.type == messages.PLAYER_TURN)
-                if(gameObj.hasTwoConnectedPlayers()) {
-                    gameObj.playerA.send(message);
-                    let msg = messages.PP_PLAYER_A;
-                    gameObj.playerB.send(msg);
-                    gameObj.setPlayerTurn(1);
-                }
+            // if(oMsg.type == messages.T_PLAYER_TURN) {
+            //     gameObj.setPlayerTurn(oMsg.data);
+            //     if(gameObj.hasTwoConnectedPlayers()) {
+            //         gameObj.setStatus("TURN");
+            //         gameObj.playerA.send(message);
+            //     }
+            // }
+            if (oMsg.type == messages.T_MAKE_A_GUESS) {
+                gameObj.playerA.send(message);
+                gameObj.setStatus("TURN");
+            }
+
         }
 
         if (oMsg.type == messages.T_GAME_WON_BY) {
