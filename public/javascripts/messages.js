@@ -28,19 +28,6 @@
     };
     exports.S_PLAYER_B = JSON.stringify(exports.O_PLAYER_B);
 
-    exports.T_PLAYER_TURN = "PLAYER-TURN";
-    exports.O_PLAYER_TURN_A = {
-        type: exports.T_PLAYER_TURN,
-        data:"A",
-    }
-    exports.S_PLAYER_TURN_A = JSON.stringify(exports.O_PLAYER_TURN_A);
-
-    exports.O_PLAYER_TURN_B = {
-        type: exports.T_PLAYER_TURN,
-        data:"B",
-    }
-    exports.S_PLAYER_TURN_B = JSON.stringify(exports.O_PLAYER_TURN_B);
-
     exports.T_MAKE_A_GUESS = "MAKE-A-GUESS";
     exports.O_MAKE_A_GUESS = {
         type: exports.T_MAKE_A_GUESS,

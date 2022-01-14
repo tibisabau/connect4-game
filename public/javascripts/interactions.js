@@ -106,10 +106,17 @@ GameState.prototype.updateGame = function(clickedSquare) {
             this.setPlayerTurn("B");
             if(this.getPlayerType() == "A") {
                 const outgoingMsg = Messages.O_MAKE_A_GUESS;
-                outgoingMsg.data = "cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5];
+                outgoingMsg.data = "cell" + this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5];
                 this.socket.send(JSON.stringify(outgoingMsg));
-                this.statusBar.setStatus(Status["wait"]);
+                const squares = document.querySelectorAll(".grid div");
+                Array.from(squares).forEach(function (el) {
+                    var e = el.cloneNode(true);
+                    e.id = el.id;
+                    e.className = el.className;
+                    el.replaceWith(e);
+                })
             }
+                this.statusBar.setStatus(Status["wait"]);
         }
 
         else {
@@ -120,6 +127,14 @@ GameState.prototype.updateGame = function(clickedSquare) {
                  const outgoingMsg = Messages.O_MAKE_A_GUESS;
                  outgoingMsg.data = "cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5];
                  this.socket.send(JSON.stringify(outgoingMsg));
+                 const squares = document.querySelectorAll(".grid div");
+                 Array.from(squares).forEach(function (el) {
+
+                     var e = el.cloneNode(true);
+                     e.id = el.id;
+                     e.className = el.className;
+                     el.replaceWith(e);
+                 })
                  this.statusBar.setStatus(Status["wait"]);
              }
         }
@@ -141,6 +156,10 @@ GameState.prototype.updateGame = function(clickedSquare) {
         let alertString;
         if(winner == "TIE") {
             alertString = Status["gameTied"];
+            alertString += Status["playAgain"];
+            this.statusBar.setStatus(alertString);
+            let finalMsg = Messages.S_GAME_TIED;
+            this.socket.send(finalMsg);
         }
         else {
             if (winner == this.playerType) {
@@ -161,13 +180,9 @@ GameState.prototype.updateGame = function(clickedSquare) {
 }
 
     GameState.prototype.initialize = function (gs) {
-        const squares = document.querySelectorAll(".cell");
+        const squares = document.querySelectorAll(".grid div");
         Array.from(squares).forEach(function (el) {
-            el.addEventListener('click', function (e) {
-                const clickedSquare = e.target["id"];
-                gs.updateGame(clickedSquare);
-            });
-            el.addEventListener('mouseover',  function (e) {
+            el.addEventListener('mouseover',  function f1(e) {
                 const hoveredSquare = e.target.id;
                 const column = hoveredSquare[5];
                 const nextAvailable = gs.stack[parseInt(column)];
@@ -175,24 +190,25 @@ GameState.prototype.updateGame = function(clickedSquare) {
                     var colorClass = "takenRed";
                 else
                     colorClass = "takenYellow";
-                document.getElementById("cell" + nextAvailable.toString() + column).className = colorClass;
+                if(nextAvailable >= 0)
+                    document.getElementById("cell" + nextAvailable.toString() + column).className = colorClass;
             });
-            el.addEventListener('mouseleave', function (e) {
+            el.addEventListener('mouseleave', function f2(e) {
                 const hoveredSquare = e.target.id;
                 const column = hoveredSquare[5];
                 const nextAvailable = gs.stack[parseInt(column)];
-                document.getElementById("cell" + nextAvailable.toString() + column).className = "cell";
+                if(nextAvailable >= 0)
+                    document.getElementById("cell" + nextAvailable.toString() + column).className = "cell";
+            });
+
+            el.addEventListener('click', function singleClick(e) {
+                const clickedSquare = e.target["id"];
+                gs.updateGame(clickedSquare);
             });
         })
+
     }
-    GameState.prototype.unInitialize = function (gs) {
-        const squares = document.querySelectorAll(".cell");
-        Array.from(squares).forEach(function (el) {
-            el.removeEventListener('click', this.singleClick, false);
-            el.removeEventListener('mouseover', this.f1, false);
-            el.removeEventListener('mouseleave', this.f2, false);
-        })
-    }
+
 function StatusBar() {
     this.setStatus = function (status) {
         document.getElementById("status").innerHTML = status;
@@ -217,7 +233,8 @@ function StatusBar() {
             gs.initializeStack();
             //if(gs.getPlayerType() == "A")
                 //if(gs.getPlayerType() == "A")
-                    gs.initialize(gs);
+            if(gs.getPlayerType() == "A")
+                gs.initialize(gs);
             // if (gs.getPlayerTurn() == null)
             //     gs.setPlayerTurn("A");
         }
@@ -235,6 +252,7 @@ function StatusBar() {
                 if(gs.getPlayerType() == "B") {
                     sb.setStatus(Status["picked"]);
                     gs.updateGame(incomingMsg.data);
+                    gs.initialize(gs);
                     gs.setPlayerTurn("B");
 
                 }
@@ -244,6 +262,7 @@ function StatusBar() {
                 if(gs.getPlayerType() == "A") {
                     sb.setStatus(Status["picked"]);
                     gs.updateGame(incomingMsg.data);
+                    gs.initialize(gs);
                     gs.setPlayerTurn("A");
             }
                 else
