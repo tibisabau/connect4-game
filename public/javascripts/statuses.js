@@ -11,6 +11,7 @@
     player1Intro: "Player 1. You choose first!",
     invalidMove: "Try again, it has to be an empty space inside the game space!",
     player2Intro: "Player 2. Wait for the other player to make it's move.",
-    picked: "The other player has made it's move. It's your turn now!",
+    picked: "YOUR TURN!",
+    wait: "YOUR OPPONENT'S TURN!",
     aborted: "Your gaming partner is no longer available, game aborted. <a href='/play'>Play again!</a>"
   };

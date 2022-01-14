@@ -70,7 +70,8 @@ wss.on("connection", function connection(ws) {
             //     }
             //}
             if (oMsg.type == messages.T_MAKE_A_GUESS) {
-                gameObj.playerB.send(message);
+                gameObj.playerB.send(message.toString());
+                //console.log(message.toString());
                 gameObj.setStatus("TURN");
             }
         }
@@ -84,7 +85,7 @@ wss.on("connection", function connection(ws) {
             //     }
             // }
             if (oMsg.type == messages.T_MAKE_A_GUESS) {
-                gameObj.playerA.send(message);
+                gameObj.playerA.send(message.toString());
                 gameObj.setStatus("TURN");
             }
 

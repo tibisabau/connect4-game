@@ -83,7 +83,7 @@ GameState.prototype.checkIfOver = function() {
         return "TIE";
     }
     //check if player A won
-    if(this.getPlayerType() == "A") {
+    if(this.getPlayerTurn() == "B") {
         if(this.fourInARow(1)) {
             return 'A';
         }
@@ -100,21 +100,33 @@ GameState.prototype.checkIfOver = function() {
 
 GameState.prototype.updateGame = function(clickedSquare) {
     if(this.stack[parseInt(clickedSquare[5])] >= 0) {
-        if(this.getPlayerType() == "A") {
+        if(this.getPlayerTurn() == "A") {
             this.gameGrid[this.stack[parseInt(clickedSquare[5])]][parseInt(clickedSquare[5])] = 1;
              document.getElementById("cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5]) .className = "red";
+            this.setPlayerTurn("B");
+            if(this.getPlayerType() == "A") {
+                const outgoingMsg = Messages.O_MAKE_A_GUESS;
+                outgoingMsg.data = "cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5];
+                this.socket.send(JSON.stringify(outgoingMsg));
+                this.statusBar.setStatus(Status["wait"]);
+            }
         }
 
         else {
             this.gameGrid[this.stack[parseInt(clickedSquare[5])]][parseInt(clickedSquare[5])] = 2;
              document.getElementById("cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5]) .className = "yellow";
-            }
-        const outgoingMsg = Messages.O_MAKE_A_GUESS;
-        outgoingMsg.data = "cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5];
-        console.log(outgoingMsg.data);
+             this.setPlayerTurn("A");
+             if(this.getPlayerType() == "B") {
+                 const outgoingMsg = Messages.O_MAKE_A_GUESS;
+                 outgoingMsg.data = "cell" +this.stack[parseInt(clickedSquare[5])].toString() + clickedSquare[5];
+                 this.socket.send(JSON.stringify(outgoingMsg));
+                 this.statusBar.setStatus(Status["wait"]);
+             }
+        }
+
+        //console.log(outgoingMsg.data);
         this.stack[parseInt(clickedSquare[5])] --;
         this.numberOfDiscs++;
-        this.socket.send(JSON.stringify(outgoingMsg));
     }
 
 
@@ -148,35 +160,39 @@ GameState.prototype.updateGame = function(clickedSquare) {
     console.table(this.gameGrid);
 }
 
-function Grid(gs) {
-    this.initialize = function () {
-        const squares = document.querySelectorAll(".grid div");
-        Array.from(squares).forEach(function(el) {
-            el.addEventListener("click", function singleClick(e) {
+    GameState.prototype.initialize = function (gs) {
+        const squares = document.querySelectorAll(".cell");
+        Array.from(squares).forEach(function (el) {
+            el.addEventListener('click', function (e) {
                 const clickedSquare = e.target["id"];
                 gs.updateGame(clickedSquare);
-            })
-            // el.addEventListener('mouseover', function (e){
-            //     const hoveredSquare = e.target.id;
-            //     const column = hoveredSquare[5];
-            //     const nextAvailable = gs.stack[parseInt(column)];
-            //     //console.table(gs.stack);
-            //     if(gs.getPlayerType() == "A")
-            //         var colorClass = "takenRed";
-            //     else
-            //         colorClass = "takenYellow";
-            //     document.getElementById("cell" + nextAvailable.toString() + column).className = colorClass;
-            // })
-            // el.addEventListener('mouseleave', function (e){
-            //     const hoveredSquare = e.target.id;
-            //     const column = hoveredSquare[5];
-            //     const nextAvailable = gs.stack[parseInt(column)];
-            //     document.getElementById("cell" + nextAvailable.toString() + column).className = "cell";
-            // })
+            });
+            el.addEventListener('mouseover',  function (e) {
+                const hoveredSquare = e.target.id;
+                const column = hoveredSquare[5];
+                const nextAvailable = gs.stack[parseInt(column)];
+                if (gs.getPlayerTurn() == "A")
+                    var colorClass = "takenRed";
+                else
+                    colorClass = "takenYellow";
+                document.getElementById("cell" + nextAvailable.toString() + column).className = colorClass;
+            });
+            el.addEventListener('mouseleave', function (e) {
+                const hoveredSquare = e.target.id;
+                const column = hoveredSquare[5];
+                const nextAvailable = gs.stack[parseInt(column)];
+                document.getElementById("cell" + nextAvailable.toString() + column).className = "cell";
+            });
         })
     }
-}
-
+    GameState.prototype.unInitialize = function (gs) {
+        const squares = document.querySelectorAll(".cell");
+        Array.from(squares).forEach(function (el) {
+            el.removeEventListener('click', this.singleClick, false);
+            el.removeEventListener('mouseover', this.f1, false);
+            el.removeEventListener('mouseleave', this.f2, false);
+        })
+    }
 function StatusBar() {
     this.setStatus = function (status) {
         document.getElementById("status").innerHTML = status;
@@ -187,15 +203,21 @@ function StatusBar() {
     const socket = new WebSocket(Setup.WEB_SOCKET_URL);
     const sb = new StatusBar();
     const gs = new GameState(socket, sb);
-    const grid = new Grid(gs);
 
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);
         //set player type
         if (incomingMsg.type === Messages.T_PLAYER_TYPE) {
-            gs.initializeStack();
-            grid.initialize();
             gs.setPlayerType(incomingMsg.data);
+            if(gs.getPlayerType() == "A")
+                sb.setStatus(Status["picked"]);
+            else
+                sb.setStatus(Status["wait"]);
+            gs.setPlayerTurn("A");
+            gs.initializeStack();
+            //if(gs.getPlayerType() == "A")
+                //if(gs.getPlayerType() == "A")
+                    gs.initialize(gs);
             // if (gs.getPlayerTurn() == null)
             //     gs.setPlayerTurn("A");
         }
@@ -209,21 +231,46 @@ function StatusBar() {
             //     }
             // }
         if (incomingMsg.type == Messages.T_MAKE_A_GUESS) {
-            if(gs.getPlayerType() == "A") {
-                sb.setStatus(Status["picked"] + incomingMsg.data);
-                gs.updateGame(incomingMsg.data);
-                gs.setPlayerTurn("B");
+            if(gs.getPlayerTurn() == "A") {
+                if(gs.getPlayerType() == "B") {
+                    sb.setStatus(Status["picked"]);
+                    gs.updateGame(incomingMsg.data);
+                    gs.setPlayerTurn("B");
+
+                }
             }
 
-            else {
-                sb.setStatus(Status["picked"] + incomingMsg.data);
-                gs.updateGame(incomingMsg.data);
-                gs.setPlayerTurn("A");
+            else if(gs.getPlayerTurn() == "B") {
+                if(gs.getPlayerType() == "A") {
+                    sb.setStatus(Status["picked"]);
+                    gs.updateGame(incomingMsg.data);
+                    gs.setPlayerTurn("A");
             }
-
+                else
+                    sb.setStatus(Status["wait"]);
+             }
         }
 
-    }
+        // if (incomingMsg.type == Messages.T_MAKE_A_GUESS) {
+        //     if(gs.getPlayerType() == "A") {
+        //         gs.updateGame(incomingMsg.data);
+        //         //gs.setPlayerTurn("A");
+        //     }
+            // else {
+            //     gs.updateGame(incomingMsg.data);
+            //     gs.setPlayerTurn("B");
+            // }
+        }
+        // if(incomingMsg.type == Messages.T_MAKE_A_GUESS_B){
+        //     if(gs.getPlayerType() == "B") {
+        //         sb.setStatus(Status["picked"]);
+        //         gs.updateGame(incomingMsg.data);
+        //         gs.setPlayerType("A");
+        //     }
+        //
+        // }
+
+    // }
         socket.onopen = function () {
             socket.send("{}");
         };
