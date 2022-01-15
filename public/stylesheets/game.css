@@ -80,6 +80,16 @@ body {
     border-radius: 50%;
     border: 1px solid black;
 }
+#time{
+    position: absolute;
+    font-size: 36px;
+    color: aliceblue;
+}
+#timer{
+    position: absolute;
+    font-size: 36px;
+    color:aliceblue;
+}
 
 .right{
     position: absolute;

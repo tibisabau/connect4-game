@@ -148,7 +148,7 @@ GameState.prototype.updateGame = function(clickedSquare) {
 
     const winner = this.checkIfOver();
     if(winner != null) {
-        const elements = document.querySelectorAll(".cell");
+        const elements = document.querySelectorAll(".grid div");
         Array.from(elements).forEach(function (el) {
           el.style.pointerEvents = "none";
         });
@@ -232,6 +232,22 @@ function StatusBar() {
             }
 
             else {
+                setInterval(countTimer, 1000);
+                var totalSeconds = 0;
+                function countTimer() {
+                    ++totalSeconds;
+                    var hour = Math.floor(totalSeconds /3600);
+                    var minute = Math.floor((totalSeconds - hour*3600)/60);
+                    var seconds = totalSeconds - (hour*3600 + minute*60);
+                    if(hour < 10)
+                        hour = "0"+hour;
+                    if(minute < 10)
+                        minute = "0"+minute;
+                    if(seconds < 10)
+                        seconds = "0"+seconds;
+                    if(gs.checkIfOver() == null)
+                        document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
+                }
                 document.getElementById("left").style.backgroundColor = "yellow";
                 document.getElementById("right").style.backgroundColor = "red";
                 sb.setStatus(Status["wait"]);
@@ -244,6 +260,22 @@ function StatusBar() {
 
         if(incomingMsg.type == Messages.T_PLAYER_2) {
             if(gs.getPlayerType() == "A") {
+                setInterval(countTimer, 1000);
+                var totalSeconds = 0;
+                function countTimer() {
+                    ++totalSeconds;
+                    var hour = Math.floor(totalSeconds /3600);
+                    var minute = Math.floor((totalSeconds - hour*3600)/60);
+                    var seconds = totalSeconds - (hour*3600 + minute*60);
+                    if(hour < 10)
+                        hour = "0"+hour;
+                    if(minute < 10)
+                        minute = "0"+minute;
+                    if(seconds < 10)
+                        seconds = "0"+seconds;
+                    if(gs.checkIfOver() == null)
+                    document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
+                }
                 sb.setStatus(Status["picked"]);
                 gs.initialize(gs);
             }
