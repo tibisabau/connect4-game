@@ -62,28 +62,13 @@ wss.on("connection", function connection(ws) {
         const gameObj = websockets[con["id"]];
         const isPlayerA = gameObj.playerA == con ? true : false;
         if (isPlayerA) {
-            // if(oMsg.type == messages.T_PLAYER_TURN) {
-            //     gameObj.setPlayerTurn(oMsg.data);
-            //     if(gameObj.hasTwoConnectedPlayers()) {
-            //         gameObj.setStatus("TURN");
-            //         gameObj.playerB.send(message);
-            //     }
-            //}
             if (oMsg.type == messages.T_MAKE_A_GUESS) {
                 gameObj.playerB.send(message.toString());
-                //console.log(message.toString());
                 gameObj.setStatus("TURN");
             }
         }
 
         else {
-            // if(oMsg.type == messages.T_PLAYER_TURN) {
-            //     gameObj.setPlayerTurn(oMsg.data);
-            //     if(gameObj.hasTwoConnectedPlayers()) {
-            //         gameObj.setStatus("TURN");
-            //         gameObj.playerA.send(message);
-            //     }
-            // }
             if(oMsg.type == messages.T_PLAYER_2) {
                 gameObj.playerA.send(message.toString());
             }

@@ -32,7 +32,7 @@
     exports.O_PLAYER_2 = {
         type: exports.T_PLAYER_2,
         data:"A",
-    }
+    };
 
     exports.T_MAKE_A_GUESS = "MAKE-A-GUESS";
     exports.O_MAKE_A_GUESS = {

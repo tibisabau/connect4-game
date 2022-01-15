@@ -115,8 +115,8 @@ GameState.prototype.updateGame = function(clickedSquare) {
                     e.className = el.className;
                     el.replaceWith(e);
                 })
-            }
                 this.statusBar.setStatus(Status["wait"]);
+            }
         }
 
         else {
@@ -232,24 +232,10 @@ function StatusBar() {
                 let msg = Messages.O_PLAYER_2;
                 socket.send(JSON.stringify(msg));
             }
-
             gs.setPlayerTurn("A");
             gs.initializeStack();
-            //if(gs.getPlayerType() == "A")
-                //if(gs.getPlayerType() == "A")
-            //if(gs.getPlayerType() == "A")
-            // if (gs.getPlayerTurn() == null)
-            //     gs.setPlayerTurn("A");
         }
-            // if (incomingMsg.type == Messages.T_PLAYER_TURN) {
-            //     console.log(gs.getPlayerTurn());
-            //     if(gs.getPlayerTurn() == "A") {
-            //         sb.setStatus(Status["player1Intro"]);
-            //     }
-            //     else {
-            //         sb.setStatus(Status["player2Intro"]);
-            //     }
-            // }
+
         if(incomingMsg.type == Messages.T_PLAYER_2) {
             if(gs.getPlayerType() == "A") {
                 sb.setStatus(Status["picked"]);
@@ -278,27 +264,7 @@ function StatusBar() {
                     sb.setStatus(Status["wait"]);
              }
         }
-
-        // if (incomingMsg.type == Messages.T_MAKE_A_GUESS) {
-        //     if(gs.getPlayerType() == "A") {
-        //         gs.updateGame(incomingMsg.data);
-        //         //gs.setPlayerTurn("A");
-        //     }
-            // else {
-            //     gs.updateGame(incomingMsg.data);
-            //     gs.setPlayerTurn("B");
-            // }
         }
-        // if(incomingMsg.type == Messages.T_MAKE_A_GUESS_B){
-        //     if(gs.getPlayerType() == "B") {
-        //         sb.setStatus(Status["picked"]);
-        //         gs.updateGame(incomingMsg.data);
-        //         gs.setPlayerType("A");
-        //     }
-        //
-        // }
-
-    // }
         socket.onopen = function () {
             socket.send("{}");
         };

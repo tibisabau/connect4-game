@@ -1,4 +1,4 @@
-.grid {
+.grid{
     position: absolute;
     border: 1px solid;
     height: 600px;
@@ -56,4 +56,13 @@ body {
         background-color: black;
         z-index: 100;
     }
+}
+
+.centerXY {
+    position: absolute;
+    top:90vh;
+    left:50%;
+    transform: translate(-50%);
+    font-size: 36px;
+    color: aliceblue;
 }
