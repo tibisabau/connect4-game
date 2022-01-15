@@ -142,6 +142,7 @@ GameState.prototype.updateGame = function(clickedSquare) {
         //console.log(outgoingMsg.data);
         this.stack[parseInt(clickedSquare[5])] --;
         this.numberOfDiscs++;
+        document.getElementById("numDiscs").innerHTML = this.numberOfDiscs + "/ 42";
     }
 
 
@@ -247,6 +248,7 @@ function StatusBar() {
                         seconds = "0"+seconds;
                     if(gs.checkIfOver() == null)
                         document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
+                       // document.getElementById("numDiscs").innerHTML = gs.numberOfDiscs + "/ 42";
                 }
                 document.getElementById("left").style.backgroundColor = "yellow";
                 document.getElementById("right").style.backgroundColor = "red";
@@ -275,6 +277,7 @@ function StatusBar() {
                         seconds = "0"+seconds;
                     if(gs.checkIfOver() == null)
                     document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
+                   // document.getElementById("numDiscs").innerHTML = gs.numberOfDiscs + "/ 42";
                 }
                 sb.setStatus(Status["picked"]);
                 gs.initialize(gs);

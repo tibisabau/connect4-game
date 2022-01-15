@@ -82,15 +82,32 @@ body {
 }
 #time{
     position: absolute;
+    top: 2%;
+    left: 5%;
     font-size: 36px;
     color: aliceblue;
 }
 #timer{
     position: absolute;
+    
+    left: 5%;
     font-size: 36px;
     color:aliceblue;
 }
-
+#discs{
+    position: absolute;
+    font-size: 36px;
+    top: 2%;
+    right: 5%;
+    color: aliceblue;
+}
+#numDiscs{
+    position: absolute;
+    font-size: 36px;
+    
+    right: 5%;
+    color:aliceblue;
+}
 .right{
     position: absolute;
     top: 40vh;
