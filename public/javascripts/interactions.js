@@ -11,60 +11,8 @@ function GameState(socket, sb) {
     this.statusBar = sb;
     this.stack = null;
     this.numberOfDiscs = 0;
-
-    this.sec = 0;
-    this.min = 0;
-    this.stoptime = true;
 }
-GameState.prototype.startTimer = function () {
-    if (this.stoptime == true) {
-          this.stoptime = false;
-          timer(gs);
-      }
-  }
-GameState.prototype.stopTimer = function () {
-    if (this.stoptime == false) {
-      this.stoptime = true;
-    }
-  }
-  function timer(gs) {
-    if (gs.stoptime == false) {
-    gs.timerCycle();
-    gs.sec = gs.sec + 1;
-    setInterval(timer(gs), 1000);
-    }
-  }
-GameState.prototype.timerCycle = function () {
-    if (this.stoptime == false) {
-    this.sec = parseInt(this.sec);
-    this.min = parseInt(this.min);
 
-    if (this.sec == 60) {
-        this.min = this.min + 1;
-        this.sec = 0;
-    }
-<<<<<<< Updated upstream
-
-    if (this.sec < 10 || this.sec == 0) {
-        this.sec = '0' + this.sec;
-    }
-    if (this.min < 10 || this.min == 0) {
-        this.min = '0' + this.min;
-    }
-
-=======
-
-    if (this.sec < 10 || this.sec == 0) {
-        this.sec = '0' + this.sec;
-    }
-    if (this.min < 10 || this.min == 0) {
-        this.min = '0' + this.min;
-    }
-
->>>>>>> Stashed changes
-    this.document.getElementById("timer").innerHTML = "Time e: " + this.min + ":" + this.sec;
-  }
-}
 GameState.prototype.getPlayerType = function () {
     return this.playerType;
 };
@@ -200,7 +148,6 @@ GameState.prototype.updateGame = function(clickedSquare) {
 
     const winner = this.checkIfOver();
     if(winner != null) {
-        this.stopTimer();
         const elements = document.querySelectorAll(".cell");
         Array.from(elements).forEach(function (el) {
           el.style.pointerEvents = "none";
@@ -272,30 +219,18 @@ function StatusBar() {
     const socket = new WebSocket(Setup.WEB_SOCKET_URL);
     const sb = new StatusBar();
     const gs = new GameState(socket, sb);
-    
+
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);
         //set player type
         if (incomingMsg.type === Messages.T_PLAYER_TYPE) {
             gs.setPlayerType(incomingMsg.data);
             if(gs.getPlayerType() == "A") {
-<<<<<<< Updated upstream
-                sb.setStatus(Status["waitForOpponent"]);
-            }
-                
-=======
-<<<<<<< HEAD
                 document.getElementById("left").style.backgroundColor = "red";
                 document.getElementById("right").style.backgroundColor = "yellow";
                 sb.setStatus(Status["waitForOpponent"]);
             }
 
-=======
-                sb.setStatus(Status["waitForOpponent"]);
-            }
-
->>>>>>> a55043e5dbc8758e6a059a21eaaa0ad02bbc487a
->>>>>>> Stashed changes
             else {
                 document.getElementById("left").style.backgroundColor = "yellow";
                 document.getElementById("right").style.backgroundColor = "red";
@@ -305,11 +240,6 @@ function StatusBar() {
             }
             gs.setPlayerTurn("A");
             gs.initializeStack();
-<<<<<<< Updated upstream
-            
-=======
-
->>>>>>> Stashed changes
         }
 
         if(incomingMsg.type == Messages.T_PLAYER_2) {
@@ -348,11 +278,6 @@ function StatusBar() {
         //server sends a close event only if the game was aborted from some side
         socket.onclose = function () {
             if (gs.checkIfOver() == null) {
-<<<<<<< Updated upstream
-                
-=======
-
->>>>>>> Stashed changes
                 sb.setStatus(Status["aborted"]);
             }
         };
