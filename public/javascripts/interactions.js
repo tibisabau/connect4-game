@@ -43,6 +43,7 @@ GameState.prototype.timerCycle = function () {
         this.min = this.min + 1;
         this.sec = 0;
     }
+<<<<<<< Updated upstream
 
     if (this.sec < 10 || this.sec == 0) {
         this.sec = '0' + this.sec;
@@ -51,6 +52,16 @@ GameState.prototype.timerCycle = function () {
         this.min = '0' + this.min;
     }
 
+=======
+
+    if (this.sec < 10 || this.sec == 0) {
+        this.sec = '0' + this.sec;
+    }
+    if (this.min < 10 || this.min == 0) {
+        this.min = '0' + this.min;
+    }
+
+>>>>>>> Stashed changes
     this.document.getElementById("timer").innerHTML = "Time e: " + this.min + ":" + this.sec;
   }
 }
@@ -92,7 +103,7 @@ function verticalCheck(player, grid){
             if(grid[row][col] == player && grid[row+1][col] == player && grid[row+2][col] == player && grid[row+3][col] == player)
                return true;
          }
-    }   
+    }
     return false;
 }
 
@@ -101,7 +112,7 @@ function diagonalCheck(player, grid){
         for (let row = 0; row < 3; row++){
             if(grid[row][col] == player && grid[row+1][col+1] == player && grid[row+2][col+2] == player && grid[row+3][col+3] == player)
                     return true;
-                
+
             }
         }
         return false;
@@ -112,7 +123,7 @@ function secondDiagonalCheck(player, grid){
         for (let row = 5; row > 2; row--){
             if(grid[row][col] == player && grid[row-1][col+1] == player && grid[row-2][col+2] == player && grid[row-3][col+3] == player)
                     return true;
-            
+
         }
     }
     return false;
@@ -268,17 +279,37 @@ function StatusBar() {
         if (incomingMsg.type === Messages.T_PLAYER_TYPE) {
             gs.setPlayerType(incomingMsg.data);
             if(gs.getPlayerType() == "A") {
+<<<<<<< Updated upstream
                 sb.setStatus(Status["waitForOpponent"]);
             }
                 
+=======
+<<<<<<< HEAD
+                document.getElementById("left").style.backgroundColor = "red";
+                document.getElementById("right").style.backgroundColor = "yellow";
+                sb.setStatus(Status["waitForOpponent"]);
+            }
+
+=======
+                sb.setStatus(Status["waitForOpponent"]);
+            }
+
+>>>>>>> a55043e5dbc8758e6a059a21eaaa0ad02bbc487a
+>>>>>>> Stashed changes
             else {
+                document.getElementById("left").style.backgroundColor = "yellow";
+                document.getElementById("right").style.backgroundColor = "red";
                 sb.setStatus(Status["wait"]);
                 let msg = Messages.O_PLAYER_2;
                 socket.send(JSON.stringify(msg));
             }
             gs.setPlayerTurn("A");
             gs.initializeStack();
+<<<<<<< Updated upstream
             
+=======
+
+>>>>>>> Stashed changes
         }
 
         if(incomingMsg.type == Messages.T_PLAYER_2) {
@@ -317,7 +348,11 @@ function StatusBar() {
         //server sends a close event only if the game was aborted from some side
         socket.onclose = function () {
             if (gs.checkIfOver() == null) {
+<<<<<<< Updated upstream
                 
+=======
+
+>>>>>>> Stashed changes
                 sb.setStatus(Status["aborted"]);
             }
         };

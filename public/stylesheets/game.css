@@ -66,3 +66,25 @@ body {
     font-size: 36px;
     color: aliceblue;
 }
+
+.left{
+    position: absolute;
+    top:40vh;
+    left: 12%;
+    font-size: 36px;
+    color: aliceblue;
+}
+.circle2, .circle1{
+    height: 90px;
+    width : 90px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.right{
+    position: absolute;
+    top: 40vh;
+    right: 4%;
+    font-size: 36px;
+    color: aliceblue;
+}
