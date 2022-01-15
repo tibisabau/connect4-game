@@ -28,6 +28,12 @@
     };
     exports.S_PLAYER_B = JSON.stringify(exports.O_PLAYER_B);
 
+    exports.T_PLAYER_2 = "PLAYER-2";
+    exports.O_PLAYER_2 = {
+        type: exports.T_PLAYER_2,
+        data:"A",
+    }
+
     exports.T_MAKE_A_GUESS = "MAKE-A-GUESS";
     exports.O_MAKE_A_GUESS = {
         type: exports.T_MAKE_A_GUESS,

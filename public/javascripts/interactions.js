@@ -226,15 +226,18 @@ function StatusBar() {
         if (incomingMsg.type === Messages.T_PLAYER_TYPE) {
             gs.setPlayerType(incomingMsg.data);
             if(gs.getPlayerType() == "A")
-                sb.setStatus(Status["picked"]);
-            else
+                sb.setStatus(Status["waitForOpponent"]);
+            else {
                 sb.setStatus(Status["wait"]);
+                let msg = Messages.O_PLAYER_2;
+                socket.send(JSON.stringify(msg));
+            }
+
             gs.setPlayerTurn("A");
             gs.initializeStack();
             //if(gs.getPlayerType() == "A")
                 //if(gs.getPlayerType() == "A")
-            if(gs.getPlayerType() == "A")
-                gs.initialize(gs);
+            //if(gs.getPlayerType() == "A")
             // if (gs.getPlayerTurn() == null)
             //     gs.setPlayerTurn("A");
         }
@@ -247,6 +250,12 @@ function StatusBar() {
             //         sb.setStatus(Status["player2Intro"]);
             //     }
             // }
+        if(incomingMsg.type == Messages.T_PLAYER_2) {
+            if(gs.getPlayerType() == "A") {
+                sb.setStatus(Status["picked"]);
+                gs.initialize(gs);
+            }
+        }
         if (incomingMsg.type == Messages.T_MAKE_A_GUESS) {
             if(gs.getPlayerTurn() == "A") {
                 if(gs.getPlayerType() == "B") {

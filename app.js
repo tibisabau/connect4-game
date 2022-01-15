@@ -84,6 +84,9 @@ wss.on("connection", function connection(ws) {
             //         gameObj.playerA.send(message);
             //     }
             // }
+            if(oMsg.type == messages.T_PLAYER_2) {
+                gameObj.playerA.send(message.toString());
+            }
             if (oMsg.type == messages.T_MAKE_A_GUESS) {
                 gameObj.playerA.send(message.toString());
                 gameObj.setStatus("TURN");
