@@ -103,7 +103,6 @@ wss.on("connection", function connection(ws) {
            * if possible, abort the game; if not, the game is already completed
            */
           const gameObj = websockets[con["id"]];
-    
           if (gameObj.isValidTransition(gameObj.gameState, "ABORTED")) {
             gameObj.setStatus("ABORTED");
               gameStatus.gamesAborted++;
@@ -125,6 +124,7 @@ wss.on("connection", function connection(ws) {
               console.log("Player B closing: " + e);
             }
           }
+          currentGame = new Game(gameStatus.gamesInitialized - 1);
         }
       });
 })
