@@ -228,8 +228,8 @@ function StatusBar() {
         if (incomingMsg.type === Messages.T_PLAYER_TYPE) {
             gs.setPlayerType(incomingMsg.data);
             if(gs.getPlayerType() == "A") {
-                document.getElementById("left").style.backgroundColor = "red";
-                document.getElementById("right").style.backgroundColor = "yellow";
+                document.getElementById("left").className = "red";
+                document.getElementById("right").className = "yellow";
                 sb.setStatus(Status["waitForOpponent"]);
             }
 
@@ -251,8 +251,8 @@ function StatusBar() {
                         document.getElementById("timer").innerHTML = hour + ":" + minute + ":" + seconds;
                        // document.getElementById("numDiscs").innerHTML = gs.numberOfDiscs + "/ 42";
                 }
-                document.getElementById("left").style.backgroundColor = "yellow";
-                document.getElementById("right").style.backgroundColor = "red";
+                document.getElementById("left").className = "yellow";
+                document.getElementById("right").className = "red";
                 sb.setStatus(Status["wait"]);
                 let msg = Messages.O_PLAYER_2;
                 socket.send(JSON.stringify(msg));

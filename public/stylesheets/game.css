@@ -43,18 +43,26 @@ body {
     cursor: pointer;
 }
 .grid div:hover ~ .takenYellow, .takenYellow{
-    background-color: rgb(243, 243, 158);
+    background-color: lightgray;
 }
 
 .grid div:hover ~ .takenRed, .takenRed{
-    background-color: rgb(241, 116, 116);
+    background-color: lightgray;
 }
 
 .red {
-    background-color: red;
+    height: 90px;
+    width : 90px;
+    border-radius: 50%;
+    content: url("../images/flame.png");
+    /*background-color: red;*/
 }
 .yellow {
-    background-color: yellow;
+    height: 90px;
+    width : 90px;
+    border-radius: 50%;
+    content: url("../images/blueFlame.jpg");
+   /* background-color: yellow;*/
 }
 @media (max-width: 799px), (max-height: 799px) {
     body::before {
@@ -142,4 +150,11 @@ body {
     right: 4%;
     font-size: 36px;
     color: aliceblue;
+}
+
+.emblem {
+    position: absolute;
+    bottom: 1%;
+    left: 5%;
+    width: 100px;
 }
