@@ -155,12 +155,14 @@ GameState.prototype.updateGame = function(clickedSquare) {
         });
 
         let alertString;
-        if(winner == "TIE" && this.getPlayerType() == "A") {
+        if(winner == "TIE") {
             alertString = Status["gameTied"];
             alertString += Status["playAgain"];
             this.statusBar.setStatus(alertString);
-            let finalMsg = Messages.S_GAME_TIED;
-            this.socket.send(finalMsg);
+            if(this.getPlayerType() == "A") {
+                let finalMsg = Messages.S_GAME_TIED;
+                this.socket.send(finalMsg);
+            }
         }
         else {
             if (winner == this.playerType) {
