@@ -11,8 +11,21 @@
     background-color: #0070c0;
     padding: 2rem;
 }
+#time::before{
+    content:"⏳";
+}
 
+#numDiscs::after{
+    content: "✔";
+}
+
+
+
+.grid:active{
+    border: 3px solid;
+}
 body {
+    display: grid;
     background-color: #00B7FF;
 }
 
@@ -26,7 +39,9 @@ body {
 .cell {
     background-color: white;
 }
-
+.grid div:hover{
+    cursor: pointer;
+}
 .grid div:hover ~ .takenYellow, .takenYellow{
     background-color: rgb(243, 243, 158);
 }
@@ -66,7 +81,20 @@ body {
     font-size: 36px;
     color: aliceblue;
 }
-
+.left:hover, .right:hover{
+    animation: rotate 1s linear;
+}
+@keyframes rotate{
+    0%{
+        transform: rotateY(0deg);
+    }
+    50%{
+        transform: rotateY(180deg);
+    }
+    100%{
+        transform: rotateY(360deg);
+    }
+}
 .left{
     position: absolute;
     top:40vh;

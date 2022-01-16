@@ -14,10 +14,6 @@ h1::after {
     color: #0070c0;
     text-shadow: 2.5px 2.5px aliceblue;
 }
-/*
-h1:hover{
-    animation: rotate 1s linear;
-}*/
 
 body{
     background-color: #00B7FF;
@@ -104,9 +100,6 @@ body{
     color: aliceblue;
     position: absolute;
     font-size: 55px;
-   /* background-color: #0070c0;
-    border-style: solid;
-    border-color: aliceblue;*/
 }
 .stat::before {
     content: "⦿";
