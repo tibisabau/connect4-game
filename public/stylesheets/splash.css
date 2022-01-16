@@ -8,11 +8,17 @@ h1{
     font-weight: bold;
     font-family: "Arial Black";
 }
+
 h1::after {
     content: " 4";
     color: #0070c0;
     text-shadow: 2.5px 2.5px aliceblue;
 }
+/*
+h1:hover{
+    animation: rotate 1s linear;
+}*/
+
 body{
     background-color: #00B7FF;
 }
@@ -58,6 +64,7 @@ body{
     }
 }
 .rules {
+    display: grid;
     width: 500px;
     height: 465px;
     right: 2%;
@@ -74,6 +81,21 @@ body{
 .title {
     font-size: 60px;
     text-align: center;
+}
+.title:hover{
+    animation: rotate 1s linear;
+}
+
+@keyframes rotate{
+    0%{
+        transform: rotateY(0deg);
+    }
+    50%{
+        transform: rotateY(180deg);
+    }
+    100%{
+        transform: rotateY(360deg);
+    }
 }
 .stat{
     list-style-type: none;
