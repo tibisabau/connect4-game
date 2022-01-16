@@ -55,16 +55,17 @@ body{
 }
 .rules {
     width: 500px;
-    height: 500px;
+    height: 465px;
     right: 2%;
-    top:25%;
+    top:31.5%;
     color: aliceblue;
     position: absolute;
-    font-size: 45px;
+    font-size: 35px;
     text-align: left;
     background-color: #0070c0;
     border-style: solid;
     border-color: aliceblue;
+    font-style: italic;
 }
 .title {
     font-size: 60px;
@@ -82,13 +83,13 @@ body{
 }
 
 #GI{
-   top:25%;
+   top:30%;
 }
 
 #GC{
-    top:50%;
+    top:55%;
 }
 
 #GA{
-    top:75%;
+    top:80%;
 }
