@@ -8,7 +8,11 @@ h1{
     font-weight: bold;
     font-family: "Arial Black";
 }
-
+h1::after {
+    content: " 4";
+    color: #0070c0;
+    text-shadow: 2.5px 2.5px aliceblue;
+}
 body{
     background-color: #00B7FF;
 }
@@ -72,6 +76,7 @@ body{
     text-align: center;
 }
 .stat{
+    list-style-type: none;
     top: 40%;
     left:5%;
     color: aliceblue;
@@ -81,7 +86,9 @@ body{
     border-style: solid;
     border-color: aliceblue;*/
 }
-
+.stat::before {
+    content: "⦿";
+}
 #GI{
    top:30%;
 }
