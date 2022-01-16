@@ -16,7 +16,7 @@
 }
 
 #numDiscs::after{
-    content: "✔";
+    content: "⭕";
 }
 
 
