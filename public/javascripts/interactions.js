@@ -155,7 +155,7 @@ GameState.prototype.updateGame = function(clickedSquare) {
         });
 
         let alertString;
-        if(winner == "TIE") {
+        if(winner == "TIE" && this.getPlayerType() == "A") {
             alertString = Status["gameTied"];
             alertString += Status["playAgain"];
             this.statusBar.setStatus(alertString);
@@ -165,15 +165,14 @@ GameState.prototype.updateGame = function(clickedSquare) {
         else {
             if (winner == this.playerType) {
                 alertString = Status["gameWon"];
+                let finalMsg = Messages.O_GAME_WON_BY;
+                finalMsg.data = winner;
+                this.socket.send(JSON.stringify(finalMsg));
             } else {
                 alertString = Status["gameLost"];
             }
             alertString += Status["playAgain"];
             this.statusBar.setStatus(alertString);
-
-            let finalMsg = Messages.O_GAME_WON_BY;
-            finalMsg.data = winner;
-            this.socket.send(JSON.stringify(finalMsg));
         }
         this.socket.close();
     }

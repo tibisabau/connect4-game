@@ -1,0 +1,73 @@
+h1{
+    position: absolute;
+    font-size: 80px;
+    color: aliceblue;
+    left:50%;
+    transform: translate(-50%);
+    font-weight: bold;
+    font-family: "Arial Black";
+}
+
+body{
+    background-color: #00B7FF;
+}
+
+.button{
+    position: absolute;
+    left:50%;
+    transform: translate(-50%);
+    top:50%;
+    font-size: 70px;
+    background-color: slateblue;
+    color: aliceblue;
+    border: 3px solid black;
+    border-radius: 12px;
+    width: 22rem;
+    height: 11rem;
+    transition-duration: 0.1s;
+    cursor: pointer;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    font-family: "Times New Roman";
+}
+.button:hover{
+    background-color: dodgerblue;
+}
+.button:active{
+    top:51%;
+}
+
+@media (max-width: 799px), (max-height: 799px) {
+    body::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 20px;
+        color: greenyellow;
+        padding: 20px;
+        content: "Your window is too small (at least 800x800px is expected) to play this game. Enlarge the browser window or zoom out to play or disable the CSS @media query.";
+        background-color: black;
+        z-index: 100;
+    }
+}
+
+.stat{
+    left:5%;
+    color: aliceblue;
+    position: absolute;
+    font-size: 55px;
+}
+
+#GI{
+   top:30%;
+}
+
+#GC{
+    top:55%;
+}
+
+#GA{
+    top:80%;
+}

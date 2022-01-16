@@ -9,6 +9,7 @@ router.get("/play", function(req, res) {
 
 router.get("/", function(req, res) {
   res.render("splash.ejs", {
+    gamesAborted: gameStatus.gamesAborted,
     gamesInitialized: gameStatus.gamesInitialized,
     gamesCompleted: gameStatus.gamesCompleted
   });

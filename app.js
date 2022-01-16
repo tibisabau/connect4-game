@@ -48,7 +48,7 @@ wss.on("connection", function connection(ws) {
     websockets[con["id"]] = currentGame;
 
     console.log(
-        `Player ${con["id"]} placed in game ${currentGame.id} as ${playerType}`
+        `Player ${con["id"]} placed in game ${currentGame.id + 1} as ${playerType}`
     );
     con.send(playerType == "A" ? messages.S_PLAYER_A : messages.S_PLAYER_B);
     //con.send(messages.S_PLAYER_TURN_A);
@@ -84,7 +84,7 @@ wss.on("connection", function connection(ws) {
             //game was won by somebody, update statistics
             gameStatus.gamesCompleted++;
         }
-        if (oMsg.type == messages.O_GAME_TIED) {
+        if (oMsg.type == "GAME-TIED") {
             gameObj.setStatus("TIED");
             //game was tied by somebody, update statistics
             gameStatus.gamesCompleted++;
