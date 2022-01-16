@@ -2,6 +2,7 @@ h1{
     position: absolute;
     font-size: 80px;
     color: aliceblue;
+    top: 1%;
     left:50%;
     transform: translate(-50%);
     font-weight: bold;
@@ -18,7 +19,7 @@ body{
     transform: translate(-50%);
     top:50%;
     font-size: 70px;
-    background-color: slateblue;
+    background-color: #0070c0;
     color: aliceblue;
     border: 3px solid black;
     border-radius: 12px;
@@ -30,7 +31,7 @@ body{
     font-family: "Times New Roman";
 }
 .button:hover{
-    background-color: dodgerblue;
+    background-color: rgb(100, 174, 248);
 }
 .button:active{
     top:51%;
@@ -52,14 +53,36 @@ body{
         z-index: 100;
     }
 }
-
+.rules {
+    width: 600px;
+    height: 600px;
+    right: 1%;
+    top:20%;
+    color: aliceblue;
+    position: absolute;
+    font-size: 55px;
+    text-align: left;
+    background-color: #0070c0;
+    border-style: solid;
+    border-color: aliceblue;
+}
+.title {
+    font-size: 60px;
+    text-align: center;
+}
 .stat{
+    width: 550px;
+    height: 300px;
+    top: 40%;
     left:5%;
     color: aliceblue;
     position: absolute;
     font-size: 55px;
+    background-color: #0070c0;
+    border-style: solid;
+    border-color: aliceblue;
 }
-
+/*
 #GI{
    top:30%;
 }
@@ -70,4 +93,4 @@ body{
 
 #GA{
     top:80%;
-}
+}*/
