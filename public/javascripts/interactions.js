@@ -313,6 +313,10 @@ function StatusBar() {
         socket.onclose = function () {
             if (gs.checkIfOver() == null) {
                 sb.setStatus(Status["aborted"]);
+                const elements = document.querySelectorAll(".grid div");
+                Array.from(elements).forEach(function (el) {
+                    el.style.pointerEvents = "none";
+                });
             }
         };
     socket.onerror = function () {};
