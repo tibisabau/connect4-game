@@ -71,8 +71,6 @@ body{
     text-align: center;
 }
 .stat{
-    width: 550px;
-    height: 300px;
     top: 40%;
     left:5%;
     color: aliceblue;
@@ -84,13 +82,13 @@ body{
 }
 
 #GI{
-   top:30%;
+   top:25%;
 }
 
 #GC{
-    top:55%;
+    top:50%;
 }
 
 #GA{
-    top:80%;
+    top:75%;
 }
